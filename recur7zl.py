@@ -21,8 +21,8 @@ from tempfile import mkdtemp
 
 
 def members(archive):
-    p = run(("7z", "l", archive),
-            stdout=PIPE, stderr=DEVNULL, universal_newlines=True)
+    p = run(("7z", "l", archive), stdout=PIPE, stderr=DEVNULL,
+            universal_newlines=True, errors="replace")
 
     lines = iter(p.stdout.splitlines())
     for line in lines:
@@ -44,8 +44,8 @@ def walk(archive, label):
         register(rmtree, directory, ignore_errors=True)
         try:
             check_call(("7z", "e", archive, member),
-                       stdout=DEVNULL, stderr=DEVNULL, cwd=directory,
-                       universal_newlines=True, timeout=15)
+                       stdout=DEVNULL, stderr=DEVNULL,
+                       cwd=directory, timeout=15)
         except CalledProcessError:
             pass
         except TimeoutExpired as e:
