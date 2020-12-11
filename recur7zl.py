@@ -60,7 +60,11 @@ def walk(archive, label):
 
 def main():
     for path in walk(argv[1], basename(argv[1])):
-        print(path)
+        try:
+            print(path)
+        except UnicodeEncodeError as e:
+            print(e, file=stderr)
+            print(path.encode("ascii", errors="replace").decode())
 
 
 if __name__ == '__main__':
