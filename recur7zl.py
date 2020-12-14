@@ -5,6 +5,7 @@ Created on 2020/12/09
 '''
 from atexit import register
 from os import listdir
+from os.path import abspath
 from os.path import basename
 from os.path import join
 from os import sep
@@ -46,8 +47,9 @@ def walk(archive, label):
             check_call(("7z", "e", archive, member),
                        stdout=DEVNULL, stderr=DEVNULL,
                        cwd=directory, timeout=15)
-        except CalledProcessError:
-            pass
+        except CalledProcessError as e:
+            ...
+            # print(e, "->", target, file=stderr)
         except TimeoutExpired as e:
             print(e, "->", target, file=stderr)
         else:
@@ -59,7 +61,7 @@ def walk(archive, label):
 
 
 def main():
-    for path in walk(argv[1], basename(argv[1])):
+    for path in walk(abspath(argv[1]), basename(argv[1])):
         try:
             print(path)
         except UnicodeEncodeError as e:
